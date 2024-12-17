@@ -39,5 +39,54 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
+    <script src="https://registry.npmmirror.com/html2canvas/1.4.1/files/dist/html2canvas.min.js"></script>
+    <script>
+      // 监听按钮点击事件以触发截图
+      function takeScreenshot() {
+        // 对整个 body 进行截图
+        html2canvas(document.body).then(function (canvas) {
+          const data = canvas.toDataURL('image/png');
+          console.log('data', data)
+          // 发送截图数据到父窗口
+          window.parent.postMessage({ screenshot: data }, '*');
+          alert('Screenshot taken! Check the console for data.');
+        }).catch(function (error) {
+          console.error('Error taking screenshot:', error);
+        });
+      }
+      // send the screenshot to the parent window
+      window.addEventListener(
+        'message',
+        function (event) {
+          if (event.data.action === 'take-screenshot') {
+            html2canvas(
+              document.body,
+              { useCors: true }
+            ).then(function (canvas) {
+              const data = canvas.toDataURL('image/png')
+              window.parent.postMessage({ screenshot: data }, '*')
+            })
+          }
+          if (event.data.action === 'take-page-screenshot') {
+            // 执行截图操作
+            html2canvas(document.body, {
+              useCORS: true,
+              onclone: function (clonedDoc) {
+                console.log('clonedDoc', clonedDoc)
+                // replaceUseSvg(clonedDoc)
+              },
+            }).then(async function (canvas) {
+              const data = canvas.toDataURL('image/png')
+              // 发送截图数据到父窗口
+              window.parent.postMessage(
+                { screenshot: data, blockScreenshot: [], action: 'take-page-screenshot', data },
+                '*'
+              )
+            })
+          }
+        },
+        false
+      )
+    </script>
   </body>
 </html>
