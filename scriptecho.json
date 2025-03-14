@@ -1,5 +1,4 @@
 {
-  "host": "https://ai.test.haumo.cn:8443", // 访问地址
   "framework": "react-native", // 框架(uniapp、flutter、react-native)，不填默认为uniapp
   "routeFile": "src/App.tsx", // 路由文件
   "codeDir": "src", // 代码目录
