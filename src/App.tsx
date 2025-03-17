@@ -1,6 +1,7 @@
 import React, { useEffect }  from "react";
 import "./App.css";
 import { createTheme, ThemeProvider } from "@rneui/themed";
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomeScreen from './screens/HomeScreen.tsx';
 
@@ -32,11 +33,13 @@ function App() {
       `}</style>
 
       <ThemeProvider theme={theme}>
+      <SafeAreaProvider>
         <Router>
           <Routes>
             <Route path="/test" element={<HomeScreen />} />
           </Routes>
         </Router>
+      </SafeAreaProvider>
       </ThemeProvider>
     </>
   );
